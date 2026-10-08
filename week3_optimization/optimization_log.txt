@@ -1,0 +1,31 @@
+======================================================================
+Week 3: Real-Time Performance Optimization of Computer Vision Algorithms
+======================================================================
+
+[1/4] Loading Week 2 trained model and generating test set ...
+  Baseline  accuracy=0.920  weight_size=262.7 KB  inference=12.460 ms +/- 1.192 ms  (batch=32, mean of 30 runs)
+
+[2/4] Applying magnitude-based weight pruning (target 40% sparsity) ...
+    conv1: 39.8% weights zeroed
+    conv2: 39.9% weights zeroed
+    fc1: 40.0% weights zeroed
+    fc2: 39.8% weights zeroed
+  Pruned    accuracy=0.880  inference=13.085 ms +/- 0.931 ms
+  Note: this NumPy implementation performs dense matrix multiplication, so zeroed
+  weights reduce accuracy risk and would enable real speedups with a sparse-matrix
+  kernel (e.g. scipy.sparse / hardware sparse acceleration); the dense forward pass
+  timed above does not itself skip the zeroed multiplications.
+
+[3/4] Applying post-training int8 weight quantization ...
+  Quantized accuracy=0.910  weight_size=65.9 KB  inference=13.566 ms +/- 1.608 ms
+
+[4/4] Summary
+----------------------------------------------------------------------
+Variant     Accuracy    Weight Size     Inference (ms)    
+Baseline    0.920       262.7           12.460            
+Pruned      0.880       262.7           13.085            
+Quantized   0.910       65.9            13.566            
+
+Quantization reduced weight storage by 74.9% (262.7 KB -> 65.9 KB)
+Accuracy change, baseline -> pruned:    -4.0 pts
+Accuracy change, baseline -> quantized: -1.0 pts

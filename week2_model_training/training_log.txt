@@ -1,0 +1,51 @@
+======================================================================
+Week 2: Deep Learning Model Implementation and Training
+Task: 4-class synthetic shape image classification (circle, square, triangle, star)
+======================================================================
+
+[1/4] Generating synthetic dataset ...
+  Train: 800  Val: 200  Test: 200  (raw size 64x64)
+
+[2/4] Preprocessing (resize -> 32x32, normalize to [0,1], NCHW) ...
+  X_train shape: (800, 3, 32, 32)
+
+[3/4] Building model (Conv-ReLU-Pool x2 -> Dense(64) -> Dense(4)) ...
+  Total trainable parameters: 67,252
+
+[4/4] Training ...
+  Epoch  1/25  train_loss=1.4071  train_acc=0.270  val_loss=1.3747  val_acc=0.340
+  Epoch  2/25  train_loss=1.3387  train_acc=0.391  val_loss=1.3384  val_acc=0.355
+  Epoch  3/25  train_loss=1.2887  train_acc=0.445  val_loss=1.3092  val_acc=0.350
+  Epoch  4/25  train_loss=1.2366  train_acc=0.471  val_loss=1.2784  val_acc=0.410
+  Epoch  5/25  train_loss=1.1699  train_acc=0.514  val_loss=1.2562  val_acc=0.355
+  Epoch  6/25  train_loss=1.1200  train_acc=0.529  val_loss=1.1921  val_acc=0.500
+  Epoch  7/25  train_loss=1.0436  train_acc=0.580  val_loss=1.1404  val_acc=0.500
+  Epoch  8/25  train_loss=0.9795  train_acc=0.613  val_loss=1.0716  val_acc=0.560
+  Epoch  9/25  train_loss=0.9118  train_acc=0.639  val_loss=1.0315  val_acc=0.555
+  Epoch 10/25  train_loss=0.8368  train_acc=0.677  val_loss=0.9316  val_acc=0.575
+  Epoch 11/25  train_loss=0.7679  train_acc=0.701  val_loss=0.8796  val_acc=0.635
+  Epoch 12/25  train_loss=0.7050  train_acc=0.746  val_loss=0.8327  val_acc=0.615
+  Epoch 13/25  train_loss=0.6460  train_acc=0.755  val_loss=0.7425  val_acc=0.705
+  Epoch 14/25  train_loss=0.5958  train_acc=0.765  val_loss=0.7160  val_acc=0.725
+  Epoch 15/25  train_loss=0.5130  train_acc=0.821  val_loss=0.6049  val_acc=0.790
+  Epoch 16/25  train_loss=0.4634  train_acc=0.838  val_loss=0.5873  val_acc=0.780
+  Epoch 17/25  train_loss=0.4327  train_acc=0.851  val_loss=0.5951  val_acc=0.765
+  Epoch 18/25  train_loss=0.3915  train_acc=0.879  val_loss=0.4959  val_acc=0.810
+  Epoch 19/25  train_loss=0.3363  train_acc=0.894  val_loss=0.4107  val_acc=0.875
+  Epoch 20/25  train_loss=0.3052  train_acc=0.907  val_loss=0.3870  val_acc=0.875
+  Epoch 21/25  train_loss=0.2667  train_acc=0.930  val_loss=0.3615  val_acc=0.860
+  Epoch 22/25  train_loss=0.2268  train_acc=0.944  val_loss=0.3185  val_acc=0.890
+  Epoch 23/25  train_loss=0.2051  train_acc=0.946  val_loss=0.3593  val_acc=0.875
+  Epoch 24/25  train_loss=0.1922  train_acc=0.953  val_loss=0.2694  val_acc=0.925
+  Epoch 25/25  train_loss=0.1615  train_acc=0.966  val_loss=0.2735  val_acc=0.910
+
+======================================================================
+FINAL TEST ACCURACY: 0.905  (181/200 correct)
+Total wall-clock time: 26.2 seconds
+======================================================================
+
+Per-class test accuracy:
+  circle    : 0.920  (n=50)
+  square    : 0.840  (n=50)
+  triangle  : 0.860  (n=50)
+  star      : 1.000  (n=50)

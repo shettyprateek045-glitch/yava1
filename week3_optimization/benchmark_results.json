@@ -1,0 +1,27 @@
+{
+  "baseline": {
+    "accuracy": 0.92,
+    "weight_size_kb": 262.703125,
+    "inference_ms_mean": 12.459738299992296,
+    "inference_ms_std": 1.1920958957990337
+  },
+  "pruned_40pct": {
+    "accuracy": 0.88,
+    "weight_size_kb": 262.703125,
+    "inference_ms_mean": 13.085429633334419,
+    "inference_ms_std": 0.9306838980591344,
+    "layer_sparsity": {
+      "conv1": 0.39814814814814814,
+      "conv2": 0.3993055555555556,
+      "fc1": 0.399993896484375,
+      "fc2": 0.3984375
+    }
+  },
+  "quantized_int8": {
+    "accuracy": 0.91,
+    "weight_size_kb": 65.9453125,
+    "inference_ms_mean": 13.566212400007771,
+    "inference_ms_std": 1.608148715007298,
+    "size_reduction_pct": 74.89740082079344
+  }
+}

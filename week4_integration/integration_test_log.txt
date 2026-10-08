@@ -1,0 +1,20 @@
+======================================================================
+Week 4: Integration Testing - FastAPI Shape Classifier Service
+======================================================================
+
+[Test 1] GET /health
+  status_code=200  body={'status': 'ok', 'model_loaded': False}  -> PASS
+
+[Test 2] POST /predict - synthetic samples per class
+  56/60 correct predictions via the live API  (accuracy=0.933)
+
+[Test 3] POST /predict with a non-image file (expects HTTP 400)
+  status_code=400  detail=Uploaded file must be an image  -> PASS
+
+[Test 4] POST /predict with corrupted image bytes (expects HTTP 400)
+  status_code=400  detail=Could not decode image file  -> PASS
+
+======================================================================
+TOTAL: 59/63 test cases passed
+Live API prediction accuracy on 60 synthetic samples: 0.933
+======================================================================

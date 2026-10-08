@@ -1,0 +1,449 @@
+{
+  "health_check": {
+    "status_code": 200,
+    "body": {
+      "status": "ok",
+      "model_loaded": false
+    },
+    "pass": true
+  },
+  "prediction_cases": [
+    {
+      "expected": "circle",
+      "predicted": "circle",
+      "confidence": 0.9503454256388355,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "circle",
+      "predicted": "circle",
+      "confidence": 0.6392764597095629,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "circle",
+      "predicted": "circle",
+      "confidence": 0.9778603906727088,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "circle",
+      "predicted": "circle",
+      "confidence": 0.8750348849686057,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "circle",
+      "predicted": "circle",
+      "confidence": 0.6591358159155449,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "circle",
+      "predicted": "circle",
+      "confidence": 0.7621643658534849,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "circle",
+      "predicted": "circle",
+      "confidence": 0.8349848761514153,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "circle",
+      "predicted": "circle",
+      "confidence": 0.7951734052092329,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "circle",
+      "predicted": "circle",
+      "confidence": 0.6525767837607332,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "circle",
+      "predicted": "circle",
+      "confidence": 0.9615875751079512,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "circle",
+      "predicted": "triangle",
+      "confidence": 0.627767571106856,
+      "status_code": 200,
+      "pass": false
+    },
+    {
+      "expected": "circle",
+      "predicted": "circle",
+      "confidence": 0.7916159827452404,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "circle",
+      "predicted": "circle",
+      "confidence": 0.8482022617604346,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "circle",
+      "predicted": "circle",
+      "confidence": 0.8708396989421332,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "circle",
+      "predicted": "circle",
+      "confidence": 0.9751152177708196,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "square",
+      "predicted": "square",
+      "confidence": 0.652180397552076,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "square",
+      "predicted": "square",
+      "confidence": 0.9963933126464171,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "square",
+      "predicted": "triangle",
+      "confidence": 0.5669007955755956,
+      "status_code": 200,
+      "pass": false
+    },
+    {
+      "expected": "square",
+      "predicted": "square",
+      "confidence": 0.7806808111450195,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "square",
+      "predicted": "square",
+      "confidence": 0.9944987350666785,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "square",
+      "predicted": "square",
+      "confidence": 0.5436353509176737,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "square",
+      "predicted": "triangle",
+      "confidence": 0.5943751641975652,
+      "status_code": 200,
+      "pass": false
+    },
+    {
+      "expected": "square",
+      "predicted": "square",
+      "confidence": 0.7730350610592505,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "square",
+      "predicted": "square",
+      "confidence": 0.5768351289589437,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "square",
+      "predicted": "square",
+      "confidence": 0.8693800421545841,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "square",
+      "predicted": "square",
+      "confidence": 0.9605314098351296,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "square",
+      "predicted": "square",
+      "confidence": 0.9262950240604318,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "square",
+      "predicted": "square",
+      "confidence": 0.9960302288005802,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "square",
+      "predicted": "square",
+      "confidence": 0.925336712371783,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "square",
+      "predicted": "square",
+      "confidence": 0.9654533463858909,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "triangle",
+      "predicted": "triangle",
+      "confidence": 0.7639438038223613,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "triangle",
+      "predicted": "triangle",
+      "confidence": 0.6631819205020169,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "triangle",
+      "predicted": "triangle",
+      "confidence": 0.9204255473071195,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "triangle",
+      "predicted": "star",
+      "confidence": 0.7583116832398339,
+      "status_code": 200,
+      "pass": false
+    },
+    {
+      "expected": "triangle",
+      "predicted": "triangle",
+      "confidence": 0.7848141066847506,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "triangle",
+      "predicted": "triangle",
+      "confidence": 0.7427211983018668,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "triangle",
+      "predicted": "triangle",
+      "confidence": 0.8914829578008518,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "triangle",
+      "predicted": "triangle",
+      "confidence": 0.9628822588231332,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "triangle",
+      "predicted": "triangle",
+      "confidence": 0.6736442502735163,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "triangle",
+      "predicted": "triangle",
+      "confidence": 0.9155941549653663,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "triangle",
+      "predicted": "triangle",
+      "confidence": 0.6534250690576276,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "triangle",
+      "predicted": "triangle",
+      "confidence": 0.882869070215089,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "triangle",
+      "predicted": "triangle",
+      "confidence": 0.9879332365033145,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "triangle",
+      "predicted": "triangle",
+      "confidence": 0.5586804547861733,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "triangle",
+      "predicted": "triangle",
+      "confidence": 0.5169398874879769,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "star",
+      "predicted": "star",
+      "confidence": 0.96211132990046,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "star",
+      "predicted": "star",
+      "confidence": 0.9999563971235375,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "star",
+      "predicted": "star",
+      "confidence": 0.9037943259422814,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "star",
+      "predicted": "star",
+      "confidence": 0.9930456241480557,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "star",
+      "predicted": "star",
+      "confidence": 0.9821855647044714,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "star",
+      "predicted": "star",
+      "confidence": 0.9998854088669219,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "star",
+      "predicted": "star",
+      "confidence": 0.9982830646918315,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "star",
+      "predicted": "star",
+      "confidence": 0.9980924338278686,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "star",
+      "predicted": "star",
+      "confidence": 0.9308433041598624,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "star",
+      "predicted": "star",
+      "confidence": 0.9999067340241911,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "star",
+      "predicted": "star",
+      "confidence": 0.9626919882219178,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "star",
+      "predicted": "star",
+      "confidence": 0.9881811907200446,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "star",
+      "predicted": "star",
+      "confidence": 0.9990593822976838,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "star",
+      "predicted": "star",
+      "confidence": 0.9993480373383428,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "star",
+      "predicted": "star",
+      "confidence": 0.9647724574642426,
+      "status_code": 200,
+      "pass": true
+    }
+  ],
+  "error_handling": [
+    {
+      "case": "non_image_upload",
+      "status_code": 400,
+      "pass": true
+    },
+    {
+      "case": "corrupted_image_bytes",
+      "status_code": 400,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total_tests": 63,
+    "total_pass": 59,
+    "api_prediction_accuracy": 0.9333333333333333
+  }
+}
