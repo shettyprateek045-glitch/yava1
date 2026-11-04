@@ -345,6 +345,7 @@ class RobustnessRequest(BaseModel):
 # =============================================================================
 
 @app.get("/health")
+@app.get("/api/health")
 def health():
     return {
         "status": "ok",
@@ -628,10 +629,16 @@ if STATIC_DIR.exists():
 
 
 @app.get("/")
+@app.get("/index.html")
+@app.get("/dashboard")
+@app.get("/studio")
 def serve_index():
     index_file = STATIC_DIR / "index.html"
+    if not index_file.exists():
+        index_file = Path(__file__).resolve().parent / "index.html"
     if index_file.exists():
-        return FileResponse(index_file)
+        from fastapi.responses import HTMLResponse
+        return HTMLResponse(content=index_file.read_text(encoding="utf-8"))
     return {"message": "ShapeVision Studio API is live. Visit /docs for OpenAPI specs."}
 
 

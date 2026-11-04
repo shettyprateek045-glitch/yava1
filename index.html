@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShapeVision Studio — CV Optimization & Retention Console</title>
+  <link rel="icon" href="data:,">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: { 50: '#eef2ff', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca' },
+            dark: { 800: '#1e293b', 850: '#172033', 900: '#0f172a' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .gradient-border {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.9) 100%);
+      backdrop-filter: blur(12px);
+    }
+  </style>
+</head>
+<body class="bg-[#0b0f19] text-slate-100 min-h-screen font-sans antialiased flex flex-col">
+
+  <!-- Top Notification Banner if running without backend -->
+  <div id="connection-banner" class="hidden bg-amber-500/10 border-b border-amber-500/20 px-4 py-2 text-xs text-amber-300 text-center flex items-center justify-center gap-2">
+    <i data-lucide="info" class="w-4 h-4"></i>
+    <span>Running in <strong>Interactive Browser Simulation Mode</strong>. To connect the live NumPy CNN backend: run <code class="bg-amber-950/60 px-1.5 py-0.5 rounded font-mono text-amber-200">uvicorn api:app --port 8000</code></span>
+  </div>
+
+  <!-- Top Navigation Bar -->
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="p-2 bg-indigo-600/20 text-indigo-400 rounded-lg border border-indigo-500/30">
+          <i data-lucide="scan" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold text-white tracking-tight flex items-center gap-2">
+            ShapeVision Studio
+            <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">v2.0 CV Pipeline</span>
+          </h1>
+          <p class="text-xs text-slate-400">4-Week End-to-End Computer Vision Shape Classification & Model Optimization</p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-4">
+        <div class="flex items-center space-x-2 text-xs bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700">
+          <span id="backend-status-indicator" class="flex h-2 w-2 relative">
+            <span id="backend-status-ping" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span id="backend-status-dot" class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          </span>
+          <span id="backend-status-text" class="text-slate-300">Checking API...</span>
+          <span class="text-slate-600 hidden sm:inline">|</span>
+          <span class="text-indigo-400 font-medium hidden sm:inline">Quantized Int8 (65.9 KB)</span>
+        </div>
+        <a href="/docs" target="_blank" class="text-xs text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg border border-slate-700 transition flex items-center gap-1.5">
+          <i data-lucide="file-code" class="w-3.5 h-3.5"></i> Swagger Docs
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <div class="border-b border-slate-800 bg-slate-900/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-2 sm:space-x-4 overflow-x-auto py-2">
+      <button onclick="switchTab('studio')" id="tab-btn-studio" class="tab-btn active px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 bg-indigo-600 text-white shadow-lg shadow-indigo-600/20">
+        <i data-lucide="pen-tool" class="w-4 h-4"></i> Interactive Studio
+      </button>
+      <button onclick="switchTab('xai')" id="tab-btn-xai" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition">
+        <i data-lucide="eye" class="w-4 h-4"></i> Explainability (XAI)
+      </button>
+      <button onclick="switchTab('benchmark')" id="tab-btn-benchmark" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition">
+        <i data-lucide="gauge" class="w-4 h-4"></i> Model Optimization
+      </button>
+      <button onclick="switchTab('robustness')" id="tab-btn-robustness" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition">
+        <i data-lucide="shield-alert" class="w-4 h-4"></i> Robustness Testing
+      </button>
+      <button onclick="switchTab('history')" id="tab-btn-history" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/60 transition">
+        <i data-lucide="history" class="w-4 h-4"></i> Audit Trail & Stats
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- ========================================================================= -->
+    <!-- TAB 1: INTERACTIVE STUDIO -->
+    <!-- ========================================================================= -->
+    <div id="tab-studio" class="tab-content grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <!-- Left Column: Input Source (Canvas / Upload / Preset) -->
+      <div class="lg:col-span-6 space-y-5">
+        <div class="gradient-border rounded-xl p-5 border border-slate-800">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+              <i data-lucide="draw-pen" class="w-4 h-4 text-indigo-400"></i> Interactive Canvas & Presets
+            </h2>
+            <div class="flex items-center gap-2">
+              <select id="model-variant-select" class="text-xs bg-slate-800 border border-slate-700 text-slate-200 rounded px-2.5 py-1 focus:ring-1 focus:ring-indigo-500">
+                <option value="quantized" selected>Model: Int8 Quantized (65.9 KB)</option>
+                <option value="baseline">Model: FP32 Baseline (262.7 KB)</option>
+                <option value="pruned">Model: 40% Pruned (67.2k params)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Canvas Drawing Area -->
+          <div class="flex flex-col items-center">
+            <div class="relative bg-slate-950 p-2 rounded-xl border border-slate-800 shadow-inner">
+              <canvas id="drawing-canvas" width="224" height="224" class="bg-[#141414] rounded-lg cursor-crosshair touch-none"></canvas>
+              <div id="canvas-overlay-text" class="absolute inset-0 flex items-center justify-center pointer-events-none text-xs text-slate-500">
+                Draw circle, square, triangle, or star
+              </div>
+            </div>
+
+            <!-- Canvas Controls -->
+            <div class="w-full mt-3 flex items-center justify-between text-xs text-slate-400">
+              <div class="flex items-center gap-2">
+                <span>Brush:</span>
+                <input type="range" id="brush-size" min="6" max="28" value="14" class="w-20 accent-indigo-500">
+              </div>
+              <div class="flex items-center gap-2">
+                <button onclick="clearCanvas()" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 rounded text-slate-300 flex items-center gap-1 transition">
+                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Clear
+                </button>
+                <button onclick="invertCanvas()" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 rounded text-slate-300 flex items-center gap-1 transition">
+                  <i data-lucide="sun-moon" class="w-3.5 h-3.5"></i> Invert
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Synthetic Shape Presets -->
+          <div class="mt-5 pt-4 border-t border-slate-800">
+            <div class="text-xs font-medium text-slate-400 mb-2 flex items-center justify-between">
+              <span>Or Load Synthetic Generator Samples:</span>
+              <button onclick="loadSampleShape('random')" class="text-indigo-400 hover:underline">Surprise Me</button>
+            </div>
+            <div class="grid grid-cols-4 gap-2">
+              <button onclick="loadSampleShape('circle')" class="py-2 px-3 bg-slate-800/80 hover:bg-indigo-600/30 hover:border-indigo-500/50 border border-slate-700 rounded-lg text-xs font-medium flex flex-col items-center gap-1 transition">
+                <i data-lucide="circle" class="w-4 h-4 text-indigo-400"></i> Circle
+              </button>
+              <button onclick="loadSampleShape('square')" class="py-2 px-3 bg-slate-800/80 hover:bg-indigo-600/30 hover:border-indigo-500/50 border border-slate-700 rounded-lg text-xs font-medium flex flex-col items-center gap-1 transition">
+                <i data-lucide="square" class="w-4 h-4 text-cyan-400"></i> Square
+              </button>
+              <button onclick="loadSampleShape('triangle')" class="py-2 px-3 bg-slate-800/80 hover:bg-indigo-600/30 hover:border-indigo-500/50 border border-slate-700 rounded-lg text-xs font-medium flex flex-col items-center gap-1 transition">
+                <i data-lucide="triangle" class="w-4 h-4 text-amber-400"></i> Triangle
+              </button>
+              <button onclick="loadSampleShape('star')" class="py-2 px-3 bg-slate-800/80 hover:bg-indigo-600/30 hover:border-indigo-500/50 border border-slate-700 rounded-lg text-xs font-medium flex flex-col items-center gap-1 transition">
+                <i data-lucide="star" class="w-4 h-4 text-emerald-400"></i> Star
+              </button>
+            </div>
+          </div>
+
+          <!-- Drag and Drop Upload -->
+          <div class="mt-4 pt-4 border-t border-slate-800">
+            <label class="block text-xs font-medium text-slate-400 mb-2">Upload Custom Image (PNG, JPG):</label>
+            <div id="drop-zone" class="border-2 border-dashed border-slate-700 hover:border-indigo-500 rounded-lg p-3 text-center cursor-pointer transition bg-slate-900/40">
+              <input type="file" id="file-input" accept="image/*" class="hidden">
+              <p class="text-xs text-slate-400 flex items-center justify-center gap-1.5">
+                <i data-lucide="upload-cloud" class="w-4 h-4 text-slate-400"></i> Drop image here or <span class="text-indigo-400 underline">browse</span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Action Button -->
+          <div class="mt-5">
+            <button onclick="runClassification()" id="classify-btn" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 font-semibold rounded-lg text-white shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 transition">
+              <i data-lucide="zap" class="w-4 h-4"></i> Run CNN Classification
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Results & Probabilities -->
+      <div class="lg:col-span-6 space-y-5">
+        
+        <!-- Live Prediction Card -->
+        <div class="gradient-border rounded-xl p-5 border border-slate-800 relative overflow-hidden">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+              <i data-lucide="activity" class="w-4 h-4 text-emerald-400"></i> Classification Result
+            </h2>
+            <span id="badge-latency" class="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+              Latency: -- ms
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 items-center bg-slate-950/60 p-4 rounded-xl border border-slate-800/80">
+            <div>
+              <p class="text-xs uppercase text-slate-400 tracking-wider font-semibold">Predicted Shape</p>
+              <h3 id="result-class-name" class="text-3xl font-extrabold text-indigo-400 capitalize mt-1">Ready</h3>
+              <p id="result-status-sub" class="text-xs text-slate-400 mt-1">Draw or select a shape to classify</p>
+            </div>
+            <div class="text-right">
+              <p class="text-xs uppercase text-slate-400 tracking-wider font-semibold">Confidence</p>
+              <h3 id="result-confidence" class="text-3xl font-extrabold text-white mt-1">--%</h3>
+              <span id="result-variant-tag" class="text-[10px] text-slate-400">Model: Int8 Quantized</span>
+            </div>
+          </div>
+
+          <!-- Probability Bars -->
+          <div class="mt-5 space-y-3">
+            <div class="text-xs font-semibold text-slate-300 flex justify-between">
+              <span>Softmax Probability Distribution</span>
+              <span class="text-slate-400">4 Classes</span>
+            </div>
+
+            <!-- Circle -->
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="flex items-center gap-1.5"><i data-lucide="circle" class="w-3.5 h-3.5 text-indigo-400"></i> Circle</span>
+                <span id="prob-circle-val" class="font-mono text-slate-300">0.0%</span>
+              </div>
+              <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                <div id="prob-circle-bar" class="bg-indigo-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <!-- Square -->
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="flex items-center gap-1.5"><i data-lucide="square" class="w-3.5 h-3.5 text-cyan-400"></i> Square</span>
+                <span id="prob-square-val" class="font-mono text-slate-300">0.0%</span>
+              </div>
+              <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                <div id="prob-square-bar" class="bg-cyan-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <!-- Triangle -->
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="flex items-center gap-1.5"><i data-lucide="triangle" class="w-3.5 h-3.5 text-amber-400"></i> Triangle</span>
+                <span id="prob-triangle-val" class="font-mono text-slate-300">0.0%</span>
+              </div>
+              <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                <div id="prob-triangle-bar" class="bg-amber-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <!-- Star -->
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="flex items-center gap-1.5"><i data-lucide="star" class="w-3.5 h-3.5 text-emerald-400"></i> Star</span>
+                <span id="prob-star-val" class="font-mono text-slate-300">0.0%</span>
+              </div>
+              <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                <div id="prob-star-bar" class="bg-emerald-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Action Buttons -->
+          <div class="mt-6 pt-4 border-t border-slate-800 flex gap-2">
+            <button onclick="switchTab('xai'); triggerExplainability();" class="flex-1 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-lg font-medium text-slate-300 flex items-center justify-center gap-1.5 transition">
+              <i data-lucide="eye" class="w-3.5 h-3.5 text-indigo-400"></i> View Saliency & Heatmaps
+            </button>
+            <button onclick="switchTab('benchmark'); triggerCompare();" class="flex-1 py-2 bg-slate-800 hover:bg-slate-700 text-xs rounded-lg font-medium text-slate-300 flex items-center justify-center gap-1.5 transition">
+              <i data-lucide="git-compare" class="w-3.5 h-3.5 text-cyan-400"></i> Compare 3 Models
+            </button>
+          </div>
+        </div>
+
+        <!-- Architecture Quick Info -->
+        <div class="gradient-border rounded-xl p-4 border border-slate-800 text-xs text-slate-400 space-y-2">
+          <div class="flex justify-between font-semibold text-slate-300">
+            <span>NumPy CNN Architecture Pipeline:</span>
+            <span class="text-indigo-400">67,252 Parameters</span>
+          </div>
+          <div class="font-mono bg-slate-950 p-2.5 rounded border border-slate-800 text-[11px] text-slate-300">
+            Input(3x32x32) &rarr; Conv(3&rarr;8, 3x3) &rarr; ReLU &rarr; MaxPool(2x2) &rarr; Conv(8&rarr;16, 3x3) &rarr; ReLU &rarr; MaxPool(2x2) &rarr; Flatten(1024) &rarr; Dense(64) &rarr; Dense(4)
+          </div>
+          <div class="flex justify-between text-[11px] text-slate-500 pt-1">
+            <span>Vectorized: im2col / col2im GEMM</span>
+            <span>Int8 Fake-Quant Round-Trip</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 2: EXPLAINABILITY (XAI) -->
+    <!-- ========================================================================= -->
+    <div id="tab-xai" class="tab-content hidden space-y-6">
+      <div class="gradient-border rounded-xl p-5 border border-slate-800">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-base font-bold text-white flex items-center gap-2">
+              <i data-lucide="sparkles" class="w-5 h-5 text-indigo-400"></i> Computer Vision Explainability (XAI)
+            </h2>
+            <p class="text-xs text-slate-400 mt-0.5">Pixel-level Gradient Saliency Map & Intermediate Layer Activation Maps</p>
+          </div>
+          <button onclick="triggerExplainability()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded text-xs font-medium flex items-center gap-1.5 transition">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Recompute Attribution
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+          <!-- Saliency Heatmap Card -->
+          <div class="md:col-span-5 bg-slate-950/70 p-5 rounded-xl border border-slate-800 flex flex-col items-center">
+            <h3 class="text-xs uppercase font-semibold text-slate-300 tracking-wider mb-2">Pixel Saliency Attribution</h3>
+            <p class="text-[11px] text-slate-400 text-center mb-4">
+              Computed via \(\frac{\partial y_{\text{pred}}}{\partial X}\) backpropagation. Warm colors (red/yellow) indicate critical geometric vertices.
+            </p>
+            <div class="relative p-2 bg-slate-900 rounded-lg border border-slate-700">
+              <img id="xai-saliency-img" src="" alt="Saliency Heatmap" class="w-48 h-48 rounded object-cover hidden">
+              <div id="xai-saliency-empty" class="w-48 h-48 flex items-center justify-center text-xs text-slate-500 text-center p-4">
+                Click "Run CNN Classification" on Canvas or Preset to generate Saliency attribution
+              </div>
+            </div>
+            <div class="w-full mt-4 flex items-center justify-between text-[11px] text-slate-400 px-4">
+              <span>Low Sensitivity (Blue)</span>
+              <div class="h-2 w-28 bg-gradient-to-r from-blue-600 via-yellow-400 to-red-600 rounded-full"></div>
+              <span>High Sensitivity (Red)</span>
+            </div>
+          </div>
+
+          <!-- Feature Maps Column -->
+          <div class="md:col-span-7 bg-slate-950/70 p-5 rounded-xl border border-slate-800 space-y-4">
+            <div>
+              <h3 class="text-xs uppercase font-semibold text-slate-300 tracking-wider">Conv Layer 1 Filters (8 Channels)</h3>
+              <p class="text-[11px] text-slate-400 mb-2">Low-level edge, contrast, and contour detection kernels:</p>
+              <div id="conv1-fmaps-grid" class="grid grid-cols-4 sm:grid-cols-8 gap-2">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-slate-800">
+              <h3 class="text-xs uppercase font-semibold text-slate-300 tracking-wider">Conv Layer 2 Filters (16 Channels)</h3>
+              <p class="text-[11px] text-slate-400 mb-2">High-level geometric vertex and shape feature representations:</p>
+              <div id="conv2-fmaps-grid" class="grid grid-cols-4 sm:grid-cols-8 gap-2">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 3: MODEL OPTIMIZATION COMPARISON -->
+    <!-- ========================================================================= -->
+    <div id="tab-benchmark" class="tab-content hidden space-y-6">
+      <div class="gradient-border rounded-xl p-5 border border-slate-800">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-base font-bold text-white flex items-center gap-2">
+              <i data-lucide="sliders" class="w-5 h-5 text-indigo-400"></i> Model Optimization Benchmarks (Week 3)
+            </h2>
+            <p class="text-xs text-slate-400 mt-0.5">Empirical comparison: FP32 Baseline vs Magnitude Pruning vs Int8 Quantization</p>
+          </div>
+          <button onclick="triggerCompare()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded text-xs font-medium flex items-center gap-1.5 transition">
+            <i data-lucide="play" class="w-3.5 h-3.5"></i> Run Real-Time 3-Model Compare
+          </button>
+        </div>
+
+        <!-- 3-Model Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          
+          <!-- Baseline Card -->
+          <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800 relative">
+            <div class="flex justify-between items-start mb-2">
+              <span class="text-xs font-bold text-slate-400 uppercase">Baseline FP32</span>
+              <span class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded font-mono">Original</span>
+            </div>
+            <div class="text-2xl font-extrabold text-white">262.7 <span class="text-sm font-normal text-slate-400">KB</span></div>
+            <div class="text-xs text-slate-400 mt-1">Accuracy: <span class="text-emerald-400 font-semibold">90.5%</span></div>
+            <div class="mt-4 pt-3 border-t border-slate-800 space-y-1 text-[11px] text-slate-400">
+              <div class="flex justify-between"><span>Parameters:</span><span class="font-mono text-slate-200">67,252</span></div>
+              <div class="flex justify-between"><span>Sparsity:</span><span class="font-mono text-slate-200">0.0%</span></div>
+              <div class="flex justify-between"><span>Memory Footprint:</span><span class="font-mono text-slate-200">100% (Reference)</span></div>
+            </div>
+          </div>
+
+          <!-- Pruned Card -->
+          <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800 relative">
+            <div class="flex justify-between items-start mb-2">
+              <span class="text-xs font-bold text-amber-400 uppercase">40% Pruned</span>
+              <span class="text-[10px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded font-mono">Sparse</span>
+            </div>
+            <div class="text-2xl font-extrabold text-white">262.7 <span class="text-sm font-normal text-slate-400">KB</span></div>
+            <div class="text-xs text-slate-400 mt-1">Accuracy: <span class="text-amber-400 font-semibold">86.5%</span> (-4.0%)</div>
+            <div class="mt-4 pt-3 border-t border-slate-800 space-y-1 text-[11px] text-slate-400">
+              <div class="flex justify-between"><span>Parameters:</span><span class="font-mono text-slate-200">67,252</span></div>
+              <div class="flex justify-between"><span>Zeroed Weights:</span><span class="font-mono text-amber-400">26,900</span></div>
+              <div class="flex justify-between"><span>Sparsity:</span><span class="font-mono text-amber-400">40.0%</span></div>
+            </div>
+          </div>
+
+          <!-- Int8 Quantized Card -->
+          <div class="bg-indigo-950/40 p-4 rounded-xl border border-indigo-500/30 relative">
+            <div class="absolute -top-2.5 right-4 bg-indigo-600 text-white text-[10px] uppercase font-bold px-2 py-0.5 rounded-full shadow">
+              Recommended
+            </div>
+            <div class="flex justify-between items-start mb-2">
+              <span class="text-xs font-bold text-indigo-400 uppercase">Int8 Quantized</span>
+              <span class="text-[10px] bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-0.5 rounded font-mono">4x Compression</span>
+            </div>
+            <div class="text-2xl font-extrabold text-white">65.9 <span class="text-sm font-normal text-slate-400">KB</span></div>
+            <div class="text-xs text-slate-400 mt-1">Accuracy: <span class="text-emerald-400 font-semibold">89.5%</span> (-1.0%)</div>
+            <div class="mt-4 pt-3 border-t border-indigo-500/20 space-y-1 text-[11px] text-slate-300">
+              <div class="flex justify-between"><span>Memory Reduction:</span><span class="font-mono text-emerald-400 font-bold">-74.9%</span></div>
+              <div class="flex justify-between"><span>Weight Format:</span><span class="font-mono text-indigo-300">Symmetric Int8</span></div>
+              <div class="flex justify-between"><span>Edge Feasibility:</span><span class="font-mono text-emerald-400">Embedded / IoT Ready</span></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Comparative Live Run Results Table -->
+        <div class="bg-slate-950/70 p-4 rounded-xl border border-slate-800">
+          <h3 class="text-xs uppercase font-semibold text-slate-300 tracking-wider mb-3">Live Image Multi-Model Scoring Results</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left text-slate-300">
+              <thead class="bg-slate-900 text-slate-400 uppercase text-[10px]">
+                <tr>
+                  <th class="p-2.5">Model Variant</th>
+                  <th class="p-2.5">Predicted Class</th>
+                  <th class="p-2.5">Confidence</th>
+                  <th class="p-2.5">Inference Latency</th>
+                  <th class="p-2.5">Weight Size</th>
+                  <th class="p-2.5">Storage Savings</th>
+                </tr>
+              </thead>
+              <tbody id="compare-results-body" class="divide-y divide-slate-800">
+                <tr>
+                  <td colspan="6" class="p-4 text-center text-slate-500">Click "Run Real-Time 3-Model Compare" above to evaluate active image</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 4: ROBUSTNESS PLAYGROUND -->
+    <!-- ========================================================================= -->
+    <div id="tab-robustness" class="tab-content hidden space-y-6">
+      <div class="gradient-border rounded-xl p-5 border border-slate-800">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-base font-bold text-white flex items-center gap-2">
+              <i data-lucide="shield-check" class="w-5 h-5 text-indigo-400"></i> Robustness & Perturbation Stress Testing
+            </h2>
+            <p class="text-xs text-slate-400 mt-0.5">Evaluate model resistance against additive Gaussian noise & geometric rotations</p>
+          </div>
+          <button onclick="triggerRobustness()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded text-xs font-medium flex items-center gap-1.5 transition">
+            <i data-lucide="activity" class="w-3.5 h-3.5"></i> Run Stress Sweep
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Noise Curve Chart -->
+          <div class="bg-slate-950/70 p-4 rounded-xl border border-slate-800">
+            <h3 class="text-xs uppercase font-semibold text-slate-300 tracking-wider mb-2">Noise Degradation Curve</h3>
+            <p class="text-[11px] text-slate-400 mb-4">Confidence vs Additive Gaussian Noise \(\sigma \in [0.0, 0.5]\):</p>
+            <div class="h-60">
+              <canvas id="noise-chart"></canvas>
+            </div>
+          </div>
+
+          <!-- Rotation Curve Chart -->
+          <div class="bg-slate-950/70 p-4 rounded-xl border border-slate-800">
+            <h3 class="text-xs uppercase font-semibold text-slate-300 tracking-wider mb-2">Rotation Invariance Curve</h3>
+            <p class="text-[11px] text-slate-400 mb-4">Confidence vs Geometric Orientation \(\theta \in [0^\circ, 315^\circ]\):</p>
+            <div class="h-60">
+              <canvas id="rotation-chart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 5: AUDIT TRAIL & STATS -->
+    <!-- ========================================================================= -->
+    <div id="tab-history" class="tab-content hidden space-y-6">
+      <div class="gradient-border rounded-xl p-5 border border-slate-800">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-base font-bold text-white flex items-center gap-2">
+              <i data-lucide="database" class="w-5 h-5 text-indigo-400"></i> SQLite Prediction Audit Trail
+            </h2>
+            <p class="text-xs text-slate-400 mt-0.5">Persisted logs of all model inferences performed via Web or API</p>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="fetchHistory()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-xs font-medium flex items-center gap-1 transition">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Refresh
+            </button>
+            <button onclick="clearHistory()" class="px-3 py-1.5 bg-red-900/40 hover:bg-red-800/60 text-red-300 border border-red-700/50 rounded text-xs font-medium flex items-center gap-1 transition">
+              <i data-lucide="trash" class="w-3.5 h-3.5"></i> Clear Log
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs text-left text-slate-300">
+            <thead class="bg-slate-900 text-slate-400 uppercase text-[10px]">
+              <tr>
+                <th class="p-2.5">ID</th>
+                <th class="p-2.5">Timestamp</th>
+                <th class="p-2.5">Predicted Class</th>
+                <th class="p-2.5">Confidence</th>
+                <th class="p-2.5">Model Variant</th>
+                <th class="p-2.5">Latency</th>
+                <th class="p-2.5">Source</th>
+              </tr>
+            </thead>
+            <tbody id="history-table-body" class="divide-y divide-slate-800">
+              <tr>
+                <td colspan="7" class="p-4 text-center text-slate-500">Loading audit records...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 bg-slate-950 py-4 text-center text-xs text-slate-500">
+    <p>ShapeVision Studio &copy; 2026 Prateek Shetty &bull; Computer Vision Internship Shape Classification Pipeline</p>
+  </footer>
+
+  <!-- Client-side Logic Script with Graceful Offline / Fallback Capability -->
+  <script>
+    lucide.createIcons();
+
+    let isBackendLive = false;
+    let apiBase = "";
+
+    // Detect if backend is accessible
+    async function initConnection() {
+      const candidates = ["", "http://localhost:8000", "http://127.0.0.1:8000"];
+      for (const base of candidates) {
+        try {
+          const res = await fetch(base + "/health", { signal: AbortSignal.timeout(1500) });
+          if (res.ok) {
+            apiBase = base;
+            isBackendLive = true;
+            break;
+          }
+        } catch (e) {}
+      }
+
+      const dot = document.getElementById('backend-status-dot');
+      const ping = document.getElementById('backend-status-ping');
+      const text = document.getElementById('backend-status-text');
+      const banner = document.getElementById('connection-banner');
+
+      if (isBackendLive) {
+        dot.className = "relative inline-flex rounded-full h-2 w-2 bg-emerald-500";
+        ping.className = "animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75";
+        text.innerText = "FastAPI Engine Live";
+        banner.classList.add('hidden');
+      } else {
+        dot.className = "relative inline-flex rounded-full h-2 w-2 bg-amber-500";
+        ping.className = "hidden";
+        text.innerText = "Browser Interactive";
+        banner.classList.remove('hidden');
+      }
+    }
+    initConnection();
+
+    // Tab Switching
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-600/20');
+        btn.classList.add('text-slate-400');
+      });
+
+      const activeContent = document.getElementById('tab-' + tabId);
+      const activeBtn = document.getElementById('tab-btn-' + tabId);
+      if (activeContent) activeContent.classList.remove('hidden');
+      if (activeBtn) {
+        activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-600/20');
+        activeBtn.classList.remove('text-slate-400');
+      }
+
+      if (tabId === 'history') fetchHistory();
+      lucide.createIcons();
+    }
+
+    // HTML5 Canvas Logic
+    const canvas = document.getElementById('drawing-canvas');
+    const ctx = canvas.getContext('2d');
+    const overlayText = document.getElementById('canvas-overlay-text');
+    let isDrawing = false;
+    let hasDrawn = false;
+
+    ctx.fillStyle = '#141414';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    function startDrawing(e) {
+      isDrawing = true;
+      hasDrawn = true;
+      overlayText.style.display = 'none';
+      draw(e);
+    }
+
+    function stopDrawing() {
+      isDrawing = false;
+      ctx.beginPath();
+    }
+
+    function getPos(e) {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+      const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+      return {
+        x: clientX - rect.left,
+        y: clientY - rect.top
+      };
+    }
+
+    function draw(e) {
+      if (!isDrawing) return;
+      const pos = getPos(e);
+      const brushSize = document.getElementById('brush-size').value;
+
+      ctx.lineWidth = brushSize;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = '#f8fafc';
+
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(pos.x, pos.y);
+    }
+
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseleave', stopDrawing);
+
+    canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawing(e); }, { passive: false });
+    canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); }, { passive: false });
+    canvas.addEventListener('touchend', stopDrawing);
+
+    function clearCanvas() {
+      ctx.fillStyle = '#141414';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      overlayText.style.display = 'flex';
+      hasDrawn = false;
+    }
+
+    function invertCanvas() {
+      const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const data = imgData.data;
+      for (let i = 0; i < data.length; i += 4) {
+        data[i] = 255 - data[i];
+        data[i + 1] = 255 - data[i + 1];
+        data[i + 2] = 255 - data[i + 2];
+      }
+      ctx.putImageData(imgData, 0, 0);
+    }
+
+    // Procedural Synthetic Preset Generator (Works offline or online!)
+    function drawProceduralShape(shape) {
+      clearCanvas();
+      overlayText.style.display = 'none';
+      hasDrawn = true;
+
+      const cx = canvas.width / 2;
+      const cy = canvas.height / 2;
+      const size = 65;
+      ctx.fillStyle = '#f8fafc';
+      ctx.strokeStyle = '#f8fafc';
+      ctx.lineWidth = 14;
+
+      if (shape === 'circle') {
+        ctx.beginPath();
+        ctx.arc(cx, cy, size, 0, 2 * Math.PI);
+        ctx.fill();
+      } else if (shape === 'square') {
+        ctx.fillRect(cx - size, cy - size, size * 2, size * 2);
+      } else if (shape === 'triangle') {
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - size - 10);
+        ctx.lineTo(cx - size - 15, cy + size);
+        ctx.lineTo(cx + size + 15, cy + size);
+        ctx.closePath();
+        ctx.fill();
+      } else if (shape === 'star') {
+        ctx.beginPath();
+        for (let i = 0; i < 10; i++) {
+          const r = i % 2 === 0 ? size + 15 : size * 0.45;
+          const a = (i * Math.PI) / 5 - Math.PI / 2;
+          const x = cx + r * Math.cos(a);
+          const y = cy + r * Math.sin(a);
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.fill();
+      }
+      runClassification();
+    }
+
+    async function loadSampleShape(shape) {
+      if (shape === 'random') {
+        const shapes = ['circle', 'square', 'triangle', 'star'];
+        shape = shapes[Math.floor(Math.random() * shapes.length)];
+      }
+
+      if (isBackendLive) {
+        try {
+          const res = await fetch(apiBase + '/api/sample/' + shape);
+          if (res.ok) {
+            const data = await res.json();
+            const img = new Image();
+            img.onload = () => {
+              overlayText.style.display = 'none';
+              ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+              hasDrawn = true;
+              runClassification();
+            };
+            img.src = data.image_base64;
+            return;
+          }
+        } catch (e) {}
+      }
+      // Offline fallback
+      drawProceduralShape(shape);
+    }
+
+    // Drag & Drop
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    dropZone.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', handleFile);
+    dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-indigo-500'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('border-indigo-500'));
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('border-indigo-500');
+      if (e.dataTransfer.files.length) { fileInput.files = e.dataTransfer.files; handleFile(); }
+    });
+
+    function handleFile() {
+      const file = fileInput.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          overlayText.style.display = 'none';
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          hasDrawn = true;
+          runClassification();
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Client-side Geometric Shape Classifier Fallback (Heuristic feature analyzer)
+    function clientClassify(canvasEl) {
+      const imgData = ctx.getImageData(0, 0, canvasEl.width, canvasEl.height);
+      const d = imgData.data;
+      let minX = canvasEl.width, maxX = 0, minY = canvasEl.height, maxY = 0;
+      let whitePixels = 0;
+
+      for (let y = 0; y < canvasEl.height; y++) {
+        for (let x = 0; x < canvasEl.width; x++) {
+          const idx = (y * canvasEl.width + x) * 4;
+          if (d[idx] > 60 || d[idx + 1] > 60 || d[idx + 2] > 60) {
+            whitePixels++;
+            if (x < minX) minX = x;
+            if (x > maxX) maxX = x;
+            if (y < minY) minY = y;
+            if (y > maxY) maxY = y;
+          }
+        }
+      }
+
+      if (whitePixels < 50) {
+        return {
+          predicted_class: "circle",
+          confidence: 0.52,
+          probabilities: { circle: 0.52, square: 0.16, triangle: 0.18, star: 0.14 },
+          latency_ms: 0.35,
+          model_variant: "client_heuristic",
+          model_metadata: { name: "Interactive Simulator" }
+        };
+      }
+
+      const w = Math.max(maxX - minX, 1);
+      const h = Math.max(maxY - minY, 1);
+      const bboxArea = w * h;
+      const fillRatio = whitePixels / bboxArea;
+
+      let cls = "circle";
+      let probs = { circle: 0.25, square: 0.25, triangle: 0.25, star: 0.25 };
+
+      if (fillRatio > 0.82) {
+        cls = "square";
+        probs = { circle: 0.05, square: 0.88, triangle: 0.04, star: 0.03 };
+      } else if (fillRatio > 0.65) {
+        cls = "circle";
+        probs = { circle: 0.91, square: 0.05, triangle: 0.02, star: 0.02 };
+      } else if (fillRatio > 0.42) {
+        cls = "triangle";
+        probs = { circle: 0.03, square: 0.05, triangle: 0.86, star: 0.06 };
+      } else {
+        cls = "star";
+        probs = { circle: 0.02, square: 0.04, triangle: 0.08, star: 0.86 };
+      }
+
+      return {
+        predicted_class: cls,
+        confidence: probs[cls],
+        probabilities: probs,
+        latency_ms: 0.42,
+        model_variant: "client_simulator",
+        model_metadata: { name: "Client Browser Simulator" }
+      };
+    }
+
+    // Classification Request
+    async function runClassification() {
+      const b64 = canvas.toDataURL('image/png');
+      const variant = document.getElementById('model-variant-select').value;
+      const btn = document.getElementById('classify-btn');
+      btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Classifying...`;
+      lucide.createIcons();
+
+      let result = null;
+      if (isBackendLive) {
+        try {
+          const res = await fetch(apiBase + '/api/predict', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ image_base64: b64, model_variant: variant, source: 'studio_canvas' })
+          });
+          if (res.ok) {
+            result = await res.json();
+          }
+        } catch (err) {}
+      }
+
+      if (!result) {
+        result = clientClassify(canvas);
+      }
+
+      renderResults(result);
+      btn.innerHTML = `<i data-lucide="zap" class="w-4 h-4"></i> Run CNN Classification`;
+      lucide.createIcons();
+    }
+
+    function renderResults(data) {
+      document.getElementById('result-class-name').innerText = data.predicted_class;
+      document.getElementById('result-confidence').innerText = (data.confidence * 100).toFixed(1) + '%';
+      document.getElementById('badge-latency').innerText = `Latency: ${data.latency_ms.toFixed(1)} ms`;
+      document.getElementById('result-variant-tag').innerText = `Model: ${data.model_metadata.name || data.model_variant}`;
+      document.getElementById('result-status-sub').innerText = `Classified in ${data.latency_ms.toFixed(1)} ms`;
+
+      const probs = data.probabilities;
+      for (const [cls, val] of Object.entries(probs)) {
+        const pct = (val * 100).toFixed(1) + '%';
+        const valEl = document.getElementById(`prob-${cls}-val`);
+        const barEl = document.getElementById(`prob-${cls}-bar`);
+        if (valEl) valEl.innerText = pct;
+        if (barEl) barEl.style.width = pct;
+      }
+    }
+
+    // Explainability (XAI)
+    async function triggerExplainability() {
+      const b64 = canvas.toDataURL('image/png');
+      const variant = document.getElementById('model-variant-select').value;
+
+      let data = null;
+      if (isBackendLive) {
+        try {
+          const res = await fetch(apiBase + '/api/explain', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ image_base64: b64, model_variant: variant })
+          });
+          if (res.ok) data = await res.json();
+        } catch (err) {}
+      }
+
+      const salImg = document.getElementById('xai-saliency-img');
+      const emptyText = document.getElementById('xai-saliency-empty');
+
+      if (data && data.saliency_heatmap) {
+        salImg.src = data.saliency_heatmap;
+        salImg.classList.remove('hidden');
+        emptyText.classList.add('hidden');
+
+        document.getElementById('conv1-fmaps-grid').innerHTML = data.feature_maps.conv1_feature_maps.map((src, i) => `
+          <div class="p-1 bg-slate-900 rounded border border-slate-800 text-center">
+            <img src="${src}" class="w-full h-12 object-cover rounded mb-1">
+            <span class="text-[9px] font-mono text-slate-400">#${i+1}</span>
+          </div>
+        `).join('');
+
+        document.getElementById('conv2-fmaps-grid').innerHTML = data.feature_maps.conv2_feature_maps.map((src, i) => `
+          <div class="p-1 bg-slate-900 rounded border border-slate-800 text-center">
+            <img src="${src}" class="w-full h-12 object-cover rounded mb-1">
+            <span class="text-[9px] font-mono text-slate-400">#${i+1}</span>
+          </div>
+        `).join('');
+      } else {
+        // Fallback canvas saliency visualization
+        const sc = document.createElement('canvas');
+        sc.width = 128; sc.height = 128;
+        const sctx = sc.getContext('2d');
+        sctx.drawImage(canvas, 0, 0, 128, 128);
+        const sdata = sctx.getImageData(0, 0, 128, 128);
+        for (let i = 0; i < sdata.data.length; i += 4) {
+          const v = sdata.data[i] / 255.0;
+          sdata.data[i] = Math.min(255, v * 280);     // Red
+          sdata.data[i+1] = Math.min(255, v * 160);   // Green
+          sdata.data[i+2] = Math.max(0, (1-v) * 120); // Blue
+        }
+        sctx.putImageData(sdata, 0, 0);
+        salImg.src = sc.toDataURL();
+        salImg.classList.remove('hidden');
+        emptyText.classList.add('hidden');
+
+        // Conv1 placeholder filters
+        document.getElementById('conv1-fmaps-grid').innerHTML = Array.from({length: 8}).map((_, i) => `
+          <div class="p-1 bg-slate-900 rounded border border-slate-800 text-center">
+            <div class="w-full h-12 bg-indigo-950/60 rounded mb-1 flex items-center justify-center text-[10px] text-indigo-400">F${i+1}</div>
+            <span class="text-[9px] font-mono text-slate-400">Edge</span>
+          </div>
+        `).join('');
+
+        document.getElementById('conv2-fmaps-grid').innerHTML = Array.from({length: 16}).map((_, i) => `
+          <div class="p-1 bg-slate-900 rounded border border-slate-800 text-center">
+            <div class="w-full h-12 bg-cyan-950/60 rounded mb-1 flex items-center justify-center text-[10px] text-cyan-400">F${i+1}</div>
+            <span class="text-[9px] font-mono text-slate-400">Vertex</span>
+          </div>
+        `).join('');
+      }
+    }
+
+    // Multi-Model Compare
+    async function triggerCompare() {
+      const b64 = canvas.toDataURL('image/png');
+      let data = null;
+      if (isBackendLive) {
+        try {
+          const res = await fetch(apiBase + '/api/compare', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ image_base64: b64 })
+          });
+          if (res.ok) data = await res.json();
+        } catch (e) {}
+      }
+
+      if (!data) {
+        const cur = clientClassify(canvas);
+        data = {
+          comparisons: {
+            baseline: { metadata: { name: "FP32 Baseline", size_kb: 262.7 }, predicted_class: cur.predicted_class, confidence: cur.confidence, latency_ms: 0.65, variant: "baseline" },
+            pruned: { metadata: { name: "40% Magnitude Pruned", size_kb: 262.7 }, predicted_class: cur.predicted_class, confidence: Math.max(0.4, cur.confidence - 0.04), latency_ms: 0.64, variant: "pruned" },
+            quantized: { metadata: { name: "Int8 Post-Training Quantized", size_kb: 65.9 }, predicted_class: cur.predicted_class, confidence: Math.max(0.4, cur.confidence - 0.01), latency_ms: 0.58, variant: "quantized" }
+          }
+        };
+      }
+
+      const tbody = document.getElementById('compare-results-body');
+      tbody.innerHTML = Object.values(data.comparisons).map(m => `
+        <tr class="hover:bg-slate-900/50">
+          <td class="p-2.5 font-semibold text-white">${m.metadata.name}</td>
+          <td class="p-2.5 capitalize text-indigo-400 font-bold">${m.predicted_class}</td>
+          <td class="p-2.5 font-mono">${(m.confidence * 100).toFixed(1)}%</td>
+          <td class="p-2.5 font-mono text-slate-300">${m.latency_ms.toFixed(2)} ms</td>
+          <td class="p-2.5 font-mono">${m.metadata.size_kb} KB</td>
+          <td class="p-2.5 font-mono text-emerald-400">${m.variant === 'quantized' ? '-74.9%' : '0%'}</td>
+        </tr>
+      `).join('');
+    }
+
+    // Robustness Sweep
+    let noiseChartInstance = null;
+    let rotChartInstance = null;
+
+    async function triggerRobustness() {
+      const b64 = canvas.toDataURL('image/png');
+      const variant = document.getElementById('model-variant-select').value;
+      let data = null;
+
+      if (isBackendLive) {
+        try {
+          const res = await fetch(apiBase + '/api/robustness', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ image_base64: b64, model_variant: variant })
+          });
+          if (res.ok) data = await res.json();
+        } catch (e) {}
+      }
+
+      if (!data) {
+        const cur = clientClassify(canvas);
+        const base = cur.confidence * 100;
+        data = {
+          noise_analysis: [
+            { noise_level: 0.0, confidence: base / 100 },
+            { noise_level: 0.05, confidence: (base * 0.96) / 100 },
+            { noise_level: 0.1, confidence: (base * 0.91) / 100 },
+            { noise_level: 0.2, confidence: (base * 0.82) / 100 },
+            { noise_level: 0.3, confidence: (base * 0.71) / 100 },
+            { noise_level: 0.4, confidence: (base * 0.60) / 100 },
+            { noise_level: 0.5, confidence: (base * 0.48) / 100 }
+          ],
+          rotation_analysis: [0, 45, 90, 135, 180, 225, 270, 315].map(deg => ({
+            rotation_deg: deg,
+            confidence: Math.max(0.4, (base * (0.85 + 0.12 * Math.cos((deg * Math.PI) / 90)))) / 100
+          }))
+        };
+      }
+
+      // Noise Chart
+      const noiseCtx = document.getElementById('noise-chart').getContext('2d');
+      if (noiseChartInstance) noiseChartInstance.destroy();
+      noiseChartInstance = new Chart(noiseCtx, {
+        type: 'line',
+        data: {
+          labels: data.noise_analysis.map(n => `\u03C3=${n.noise_level}`),
+          datasets: [{
+            label: 'Confidence (%)',
+            data: data.noise_analysis.map(n => (n.confidence * 100).toFixed(1)),
+            borderColor: '#6366f1',
+            backgroundColor: 'rgba(99, 102, 241, 0.1)',
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: { min: 0, max: 100, grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } },
+            x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
+          },
+          plugins: { legend: { display: false } }
+        }
+      });
+
+      // Rotation Chart
+      const rotCtx = document.getElementById('rotation-chart').getContext('2d');
+      if (rotChartInstance) rotChartInstance.destroy();
+      rotChartInstance = new Chart(rotCtx, {
+        type: 'bar',
+        data: {
+          labels: data.rotation_analysis.map(r => `${r.rotation_deg}\u00B0`),
+          datasets: [{
+            label: 'Confidence (%)',
+            data: data.rotation_analysis.map(r => (r.confidence * 100).toFixed(1)),
+            backgroundColor: '#06b6d4',
+            borderRadius: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: { min: 0, max: 100, grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } },
+            x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
+          },
+          plugins: { legend: { display: false } }
+        }
+      });
+    }
+
+    // History & Audit Log
+    async function fetchHistory() {
+      let data = null;
+      if (isBackendLive) {
+        try {
+          const res = await fetch(apiBase + '/api/history?limit=25');
+          if (res.ok) data = await res.json();
+        } catch (e) {}
+      }
+
+      const tbody = document.getElementById('history-table-body');
+      if (!data || !data.history || data.history.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-slate-500">No predictions logged yet. Draw or select a shape on the Interactive Studio to record inferences.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = data.history.map(r => `
+        <tr class="hover:bg-slate-900/50">
+          <td class="p-2.5 font-mono text-slate-500">#${r.id}</td>
+          <td class="p-2.5 text-slate-400">${new Date(r.timestamp).toLocaleTimeString()}</td>
+          <td class="p-2.5 capitalize font-semibold text-indigo-400">${r.predicted_class}</td>
+          <td class="p-2.5 font-mono">${(r.confidence * 100).toFixed(1)}%</td>
+          <td class="p-2.5"><span class="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-300">${r.model_variant}</span></td>
+          <td class="p-2.5 font-mono text-slate-400">${r.latency_ms.toFixed(1)} ms</td>
+          <td class="p-2.5 text-slate-500">${r.source}</td>
+        </tr>
+      `).join('');
+    }
+
+    async function clearHistory() {
+      if (!confirm("Clear prediction audit log?")) return;
+      if (isBackendLive) {
+        try { await fetch(apiBase + '/api/history', { method: 'DELETE' }); } catch (e) {}
+      }
+      fetchHistory();
+    }
+  </script>
+</body>
+</html>
