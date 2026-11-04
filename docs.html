@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ShapeVision Studio — Interactive API Docs (Swagger)</title>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css" />
+  <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/favicon-16x16.png" sizes="16x16" />
+  <style>
+    html { box-sizing: border-box; overflow: -moz-scrollbars-vertical; overflow-y: scroll; }
+    *, *:before, *:after { box-sizing: inherit; }
+    body { margin:0; background: #0b0f19; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #f1f5f9; }
+    .server-notice {
+      background: #0f172a;
+      color: #94a3b8;
+      padding: 12px 24px;
+      font-size: 13px;
+      border-bottom: 1px solid #1e293b;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .server-notice a { color: #6366f1; text-decoration: none; font-weight: 500; }
+    .server-notice a:hover { text-decoration: underline; }
+    .swagger-ui .topbar { background-color: #0f172a; border-bottom: 1px solid #1e293b; }
+    /* Dark mode adjustments for Swagger */
+    .swagger-ui { background: #0b0f19; filter: invert(88%) hue-rotate(180deg); }
+    .swagger-ui .topbar { filter: invert(0); }
+  </style>
+</head>
+<body>
+  <div class="server-notice">
+    <span>OpenAPI 3.1.0 Specification — <strong>ShapeVision Studio REST API</strong></span>
+    <span><a href="../">← Back to ShapeVision Studio</a></span>
+  </div>
+  <div id="swagger-ui"></div>
+  <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-standalone-preset.js"></script>
+  <script>
+    window.onload = function() {
+      const ui = SwaggerUIBundle({
+        url: "./openapi.json",
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIStandalonePreset
+        ],
+        plugins: [
+          SwaggerUIBundle.plugins.DownloadUrl
+        ],
+        layout: "StandaloneLayout"
+      });
+      window.ui = ui;
+    };
+  </script>
+</body>
+</html>
