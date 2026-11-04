@@ -11,420 +11,420 @@
     {
       "expected": "circle",
       "predicted": "circle",
-      "confidence": 0.9503454256388355,
+      "confidence": 0.9263458498381761,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "circle",
       "predicted": "circle",
-      "confidence": 0.6392764597095629,
+      "confidence": 0.929873623429631,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "circle",
       "predicted": "circle",
-      "confidence": 0.9778603906727088,
+      "confidence": 0.8709558051920437,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "circle",
       "predicted": "circle",
-      "confidence": 0.8750348849686057,
+      "confidence": 0.7762170899365092,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "circle",
       "predicted": "circle",
-      "confidence": 0.6591358159155449,
+      "confidence": 0.8932694729493195,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "circle",
       "predicted": "circle",
-      "confidence": 0.7621643658534849,
+      "confidence": 0.6757247067205855,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "circle",
       "predicted": "circle",
-      "confidence": 0.8349848761514153,
+      "confidence": 0.8477408304716181,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "circle",
       "predicted": "circle",
-      "confidence": 0.7951734052092329,
+      "confidence": 0.6377054659979889,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "circle",
       "predicted": "circle",
-      "confidence": 0.6525767837607332,
+      "confidence": 0.860198525002722,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "circle",
       "predicted": "circle",
-      "confidence": 0.9615875751079512,
-      "status_code": 200,
-      "pass": true
-    },
-    {
-      "expected": "circle",
-      "predicted": "triangle",
-      "confidence": 0.627767571106856,
-      "status_code": 200,
-      "pass": false
-    },
-    {
-      "expected": "circle",
-      "predicted": "circle",
-      "confidence": 0.7916159827452404,
+      "confidence": 0.8868902279231436,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "circle",
       "predicted": "circle",
-      "confidence": 0.8482022617604346,
+      "confidence": 0.7924497392215238,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "circle",
       "predicted": "circle",
-      "confidence": 0.8708396989421332,
+      "confidence": 0.7466426686045515,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "circle",
       "predicted": "circle",
-      "confidence": 0.9751152177708196,
+      "confidence": 0.9374727176200778,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "circle",
+      "predicted": "circle",
+      "confidence": 0.9439233472148554,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "circle",
+      "predicted": "circle",
+      "confidence": 0.9407187788066539,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "square",
       "predicted": "square",
-      "confidence": 0.652180397552076,
+      "confidence": 0.7555338479308857,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "square",
       "predicted": "square",
-      "confidence": 0.9963933126464171,
-      "status_code": 200,
-      "pass": true
-    },
-    {
-      "expected": "square",
-      "predicted": "triangle",
-      "confidence": 0.5669007955755956,
-      "status_code": 200,
-      "pass": false
-    },
-    {
-      "expected": "square",
-      "predicted": "square",
-      "confidence": 0.7806808111450195,
-      "status_code": 200,
-      "pass": true
-    },
-    {
-      "expected": "square",
-      "predicted": "square",
-      "confidence": 0.9944987350666785,
-      "status_code": 200,
-      "pass": true
-    },
-    {
-      "expected": "square",
-      "predicted": "square",
-      "confidence": 0.5436353509176737,
+      "confidence": 0.9962060296338902,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "square",
       "predicted": "triangle",
-      "confidence": 0.5943751641975652,
+      "confidence": 0.5013300155398861,
       "status_code": 200,
       "pass": false
     },
     {
       "expected": "square",
       "predicted": "square",
-      "confidence": 0.7730350610592505,
+      "confidence": 0.48685070328014823,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "square",
       "predicted": "square",
-      "confidence": 0.5768351289589437,
+      "confidence": 0.9968880931969476,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "square",
       "predicted": "square",
-      "confidence": 0.8693800421545841,
+      "confidence": 0.45749270494208666,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "square",
+      "predicted": "triangle",
+      "confidence": 0.5495880617502603,
+      "status_code": 200,
+      "pass": false
+    },
+    {
+      "expected": "square",
+      "predicted": "square",
+      "confidence": 0.5008795041305268,
+      "status_code": 200,
+      "pass": true
+    },
+    {
+      "expected": "square",
+      "predicted": "triangle",
+      "confidence": 0.5258564347926918,
+      "status_code": 200,
+      "pass": false
+    },
+    {
+      "expected": "square",
+      "predicted": "square",
+      "confidence": 0.602304857294082,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "square",
       "predicted": "square",
-      "confidence": 0.9605314098351296,
+      "confidence": 0.9240070008293252,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "square",
       "predicted": "square",
-      "confidence": 0.9262950240604318,
+      "confidence": 0.9742746435098336,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "square",
       "predicted": "square",
-      "confidence": 0.9960302288005802,
+      "confidence": 0.994221764960687,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "square",
       "predicted": "square",
-      "confidence": 0.925336712371783,
+      "confidence": 0.9959868916657945,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "square",
       "predicted": "square",
-      "confidence": 0.9654533463858909,
+      "confidence": 0.9882260822075838,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "triangle",
       "predicted": "triangle",
-      "confidence": 0.7639438038223613,
+      "confidence": 0.7980703137331823,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "triangle",
       "predicted": "triangle",
-      "confidence": 0.6631819205020169,
+      "confidence": 0.7882053240210264,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "triangle",
       "predicted": "triangle",
-      "confidence": 0.9204255473071195,
+      "confidence": 0.9122074336845253,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "triangle",
       "predicted": "star",
-      "confidence": 0.7583116832398339,
+      "confidence": 0.5726841958319453,
       "status_code": 200,
       "pass": false
     },
     {
       "expected": "triangle",
       "predicted": "triangle",
-      "confidence": 0.7848141066847506,
+      "confidence": 0.8280644500008246,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "triangle",
       "predicted": "triangle",
-      "confidence": 0.7427211983018668,
+      "confidence": 0.6390950352435592,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "triangle",
       "predicted": "triangle",
-      "confidence": 0.8914829578008518,
+      "confidence": 0.8478944685342813,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "triangle",
       "predicted": "triangle",
-      "confidence": 0.9628822588231332,
+      "confidence": 0.9191759206860252,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "triangle",
       "predicted": "triangle",
-      "confidence": 0.6736442502735163,
+      "confidence": 0.8123637468763314,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "triangle",
       "predicted": "triangle",
-      "confidence": 0.9155941549653663,
+      "confidence": 0.8444769139200544,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "triangle",
       "predicted": "triangle",
-      "confidence": 0.6534250690576276,
+      "confidence": 0.6919177381134299,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "triangle",
       "predicted": "triangle",
-      "confidence": 0.882869070215089,
+      "confidence": 0.7475630834680667,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "triangle",
       "predicted": "triangle",
-      "confidence": 0.9879332365033145,
+      "confidence": 0.9860052749702043,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "triangle",
       "predicted": "triangle",
-      "confidence": 0.5586804547861733,
+      "confidence": 0.5827702425321668,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "triangle",
       "predicted": "triangle",
-      "confidence": 0.5169398874879769,
+      "confidence": 0.5201394205469292,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "star",
       "predicted": "star",
-      "confidence": 0.96211132990046,
+      "confidence": 0.9709049107027166,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "star",
       "predicted": "star",
-      "confidence": 0.9999563971235375,
+      "confidence": 0.9999827699017267,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "star",
       "predicted": "star",
-      "confidence": 0.9037943259422814,
+      "confidence": 0.831145664644488,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "star",
       "predicted": "star",
-      "confidence": 0.9930456241480557,
+      "confidence": 0.733039738275251,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "star",
       "predicted": "star",
-      "confidence": 0.9821855647044714,
+      "confidence": 0.979257931250592,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "star",
       "predicted": "star",
-      "confidence": 0.9998854088669219,
+      "confidence": 0.9920277788501162,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "star",
       "predicted": "star",
-      "confidence": 0.9982830646918315,
+      "confidence": 0.999476170608525,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "star",
       "predicted": "star",
-      "confidence": 0.9980924338278686,
+      "confidence": 0.9991842946486156,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "star",
       "predicted": "star",
-      "confidence": 0.9308433041598624,
+      "confidence": 0.9879395894747235,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "star",
       "predicted": "star",
-      "confidence": 0.9999067340241911,
+      "confidence": 0.9999726204191334,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "star",
       "predicted": "star",
-      "confidence": 0.9626919882219178,
+      "confidence": 0.7930599678436745,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "star",
       "predicted": "star",
-      "confidence": 0.9881811907200446,
+      "confidence": 0.9967805840128152,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "star",
       "predicted": "star",
-      "confidence": 0.9990593822976838,
+      "confidence": 0.9911612482948965,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "star",
       "predicted": "star",
-      "confidence": 0.9993480373383428,
+      "confidence": 0.9995994791647383,
       "status_code": 200,
       "pass": true
     },
     {
       "expected": "star",
       "predicted": "star",
-      "confidence": 0.9647724574642426,
+      "confidence": 0.9275496368399866,
       "status_code": 200,
       "pass": true
     }

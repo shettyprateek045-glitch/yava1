@@ -1,0 +1,66 @@
+name: CI — Reproduce Pipeline & Run Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python dependencies
+        run: |
+          pip install -r requirements.txt -r requirements-advanced.txt
+
+      - name: Week 1 — Generate Diagrams & Flowcharts
+        run: |
+          cd week1_algorithm_design
+          python make_diagrams.py
+
+      - name: Week 2 — Verify Dataset Generator & Model
+        run: |
+          cd week2_model_training
+          python dataset.py
+
+      - name: Week 3 — Magnitude Pruning & Int8 Quantization Benchmarks
+        run: |
+          cd week3_optimization
+          python optimize.py
+
+      - name: Week 4 — FastAPI Integration Tests
+        run: |
+          cd week4_integration
+          python test_client.py
+
+      - name: Comprehensive PyTest Test Suite
+        run: |
+          pytest tests/ -v
+
+      - name: End-to-End Master Runner Verification
+        run: |
+          python run_all.py
+
+      - name: Upload Generated Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: cv-pipeline-outputs
+          path: |
+            week1_algorithm_design/diagrams/
+            week2_model_training/training_history.json
+            week2_model_training/training_log.txt
+            week3_optimization/benchmark_results.json
+            week3_optimization/optimization_log.txt
+            week4_integration/integration_test_results.json
+            week4_integration/integration_test_log.txt
+          retention-days: 14
