@@ -81,10 +81,14 @@ def init_db():
         """)
         conn.commit()
 
+# Ensure database and data directory are initialized immediately
+init_db()
+
 
 def log_prediction(predicted_class: str, confidence: float, model_variant: str,
                    latency_ms: float, probabilities: dict, source: str = "upload"):
     try:
+        init_db()
         with sqlite3.connect(DB_PATH) as conn:
             conn.execute("""
                 INSERT INTO prediction_history (timestamp, predicted_class, confidence, model_variant, latency_ms, probabilities, source)
@@ -574,6 +578,7 @@ def api_benchmark():
 def api_history(limit: int = 50):
     """Retrieves recent prediction audit records."""
     try:
+        init_db()
         with sqlite3.connect(DB_PATH) as conn:
             conn.row_factory = sqlite3.Row
             cursor = conn.execute(
@@ -587,7 +592,7 @@ def api_history(limit: int = 50):
                     pass
             return {"history": rows, "count": len(rows)}
     except Exception as e:
-        return {"history": [], "error": str(e)}
+        return {"history": [], "count": 0, "error": str(e)}
 
 
 @app.delete("/api/history")
